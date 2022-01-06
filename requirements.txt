@@ -30,7 +30,7 @@ python-social-auth
 social-auth-app-django
 pika==0.9.14
 django-paypal==1.1.1
-celery==4.3
+celery==5.2.2
 django-celery-beat
 django-celery-results
 redis
