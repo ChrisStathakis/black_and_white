@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.test.client import Client
 from django.shortcuts import reverse
 # Create your tests here.
+
+
 from catalogue.models import Product, ProductClass, Gifts
 from accounts.models import User
 
@@ -9,6 +11,16 @@ from cart.models import Cart, CartItem, CartSubscribe
 from subscribe.models import Subscribe, UserSubscribe
 from site_settings.models import Shipping, PaymentMethod
 from point_of_sale.models import Order, OrderSubscribeDiscount, OrderItem, OrderGift, OrderSubscribe
+
+
+
+class TestCreateCart(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username="hello", password="hello")
+
+    def test_create_cart_with_session(self):
+        pass
 
 
 class TestCartAndOrder(TestCase):

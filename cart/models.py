@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
+
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from .managers import CartManager
@@ -36,20 +36,20 @@ class Cart(models.Model):
     OPEN, MERGED, SAVED, FROZEN, SUBMITTED = (
         "Open", "Merged", "Saved", "Frozen", "Submitted")
     STATUS_CHOICES = (
-        (OPEN, _("Open - currently active")),
-        (MERGED, _("Merged - superceded by another basket")),
-        (SAVED, _("Saved - for items to be purchased later")),
-        (FROZEN, _("Frozen - the basket cannot be modified")),
-        (SUBMITTED, _("Submitted")),
+        (OPEN, "Open - currently active"),
+        (MERGED, "Merged - superceded by another basket"),
+        (SAVED, "Saved - for items to be purchased later"),
+        (FROZEN,"Frozen - the basket cannot be modified"),
+        (SUBMITTED, "Submitted"),
     )
     status = models.CharField(
-        _("Status"), max_length=128, default=OPEN, choices=STATUS_CHOICES)
+        "Status", max_length=128, default=OPEN, choices=STATUS_CHOICES)
 
     vouchers = models.ManyToManyField(Voucher)
-    timestamp = models.DateTimeField(_("Date created"), auto_now_add=True)
+    timestamp = models.DateTimeField("Date created", auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    date_merged = models.DateTimeField(_("Date merged"), null=True, blank=True)
-    date_submitted = models.DateTimeField(_("Date submitted"), null=True,
+    date_merged = models.DateTimeField("Date merged", null=True, blank=True)
+    date_submitted = models.DateTimeField("Date submitted", null=True,
                                           blank=True)
     editable_statuses = (OPEN, SAVED)
 
@@ -89,15 +89,16 @@ class Cart(models.Model):
         return f'Cart {self.id}'
 
     def save(self, *args, **kwargs):
-        cart_items = self.order_items.all()
-        self.value = cart_items.aggregate(Sum('total_value'))['total_value__sum'] if cart_items.exists() else 0
-        self.voucher_discount = self.discount_from_vouchers()
-        self.discount_value = self.calculate_discount_from_subs()
-        self.subscribe_value = self.calculate_new_subscribes()
-        self.payment_method_cost = 0.00 if not self.payment_method else self.payment_method.estimate_additional_cost(self.value)
-        self.shipping_method_cost = 0.00 if not self.shipping_method else self.shipping_method.estimate_additional_cost(self.value)
-        self.final_value = Decimal(self.value) - Decimal(self.discount_value) - Decimal(self.voucher_discount)\
-                           + Decimal(self.payment_method_cost) + Decimal(self.shipping_method_cost) + Decimal(self.subscribe_value)
+        if self.id:
+            cart_items = self.order_items.all()
+            self.value = cart_items.aggregate(Sum('total_value'))['total_value__sum'] if cart_items.exists() else 0
+            self.voucher_discount = self.discount_from_vouchers()
+            self.discount_value = self.calculate_discount_from_subs()
+            self.subscribe_value = self.calculate_new_subscribes()
+            self.payment_method_cost = 0.00 if not self.payment_method else self.payment_method.estimate_additional_cost(self.value)
+            self.shipping_method_cost = 0.00 if not self.shipping_method else self.shipping_method.estimate_additional_cost(self.value)
+            self.final_value = Decimal(self.value) - Decimal(self.discount_value) - Decimal(self.voucher_discount)\
+                               + Decimal(self.payment_method_cost) + Decimal(self.shipping_method_cost) + Decimal(self.subscribe_value)
         super().save(*args, **kwargs)
 
     def discount_from_vouchers(self):

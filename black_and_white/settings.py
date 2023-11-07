@@ -11,15 +11,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-REAL_DB = True
-PRODUCTION = True
+DEBUG = os.environ.get("DEBUG", True)
+REAL_DB = os.environ.get("REAL_DB", False)
+PRODUCTION = False #os.environ.get("PRODUCTION", True)
 
 
-if PRODUCTION:
-    ALLOWED_HOSTS = ['blackkaiwhite.herokuapp.com', 'www.black-and-white.gr']
-else:
-    ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
 
 
 if PRODUCTION:
@@ -28,13 +25,7 @@ if PRODUCTION:
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-'''
-if PRODUCTION:
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-'''
+
 
 # Application definition
 
@@ -62,7 +53,7 @@ INSTALLED_APPS = [
     'blog',
 
     'django_tables2',
-    'social_django',
+    # 'social_django',
     'tinymce',
 
     'import_export',
@@ -72,6 +63,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -110,9 +102,9 @@ if REAL_DB:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': config('DATABASE'),
-            'USER': config('USER'),
-            'PASSWORD': config('PASSWORD'),
+            'NAME': config('POSTGRES_DB'),
+            'USER': config('POSTGRES_USER'),
+            'PASSWORD': config('POSTGRES_PASSWORD'),
             'HOST': config('HOST'),
             'PORT': '5432',
         }
@@ -184,7 +176,7 @@ if REAL_DB:
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    from storages.backends.s3boto import S3BotoStorage
+    # from storages.backends.s3boto import S3BotoStorage
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 
@@ -194,12 +186,12 @@ RETAIL_TRANSCATIONS = False
 MANUAL_RETAIL_TRANSCATIONS = False
 PRODUCT_ATTRIBUTE_TRANSCATIONS = True
 USE_QTY_LIMIT = False
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.linkedin.LinkedinOAuth2',
-    'social_core.backends.instagram.InstagramOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
+    # 'social_core.backends.linkedin.LinkedinOAuth2',
+    # 'social_core.backends.instagram.InstagramOAuth2',
+    # 'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -210,18 +202,19 @@ LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'login'
 
 
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')    # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = config('SOCIAL_AUTH_FACEBOOK_SECRET')  # App Secret
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # add this
+#SOCIAL_AUTH_URL_NAMESPACE = 'social'
+#SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')    # App ID
+#SOCIAL_AUTH_FACEBOOK_SECRET = config('SOCIAL_AUTH_FACEBOOK_SECRET')  # App Secret
+#SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # add this
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {  # add this
     'fields': 'email'
 }
 
 
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+#SENDGRID_API_KEY = config('SENDGRID_API_KEY')
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 SENDGRID_ECHO_TO_STDOUT = True
 SITE_EMAIL = 'lirageika@hotmail.gr'
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

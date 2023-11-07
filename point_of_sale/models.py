@@ -47,7 +47,7 @@ class Order(DefaultOrderModel):
     number = models.SlugField(max_length=128, db_index=True, blank=True)
     favorite_order = models.BooleanField(default=False)
     status = models.CharField(max_length=1, choices=ORDER_STATUS, default='1', verbose_name="Κατάσταση")
-    order_type = models.CharField(max_length=1, choices=ORDER_TYPES, default='r', verbose_name='Είδος')
+    order_type = models.CharField(max_length=2, choices=ORDER_TYPES, default='r', verbose_name='Είδος')
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0,
                                      verbose_name='Συνολικο Κόστος')
     user = models.ForeignKey(User,

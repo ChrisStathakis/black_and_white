@@ -14,6 +14,7 @@ def generate_cart_id():
 
 
 def check_if_cart_id(request):
+    # creates a unique cart id associate with django session
     cart_id = request.session.get('cart_id', None)
     if cart_id is None:
         request.session['cart_id'] = generate_cart_id()

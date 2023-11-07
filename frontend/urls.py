@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.urls import path, re_path, include
 from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
@@ -24,7 +23,7 @@ urlpatterns = [
     path('αναζήτηση/', SearchView.as_view(), name='search_page'),
     path('προσφορές/', OfferView.as_view(), name='offer_view'),
     path('νέα-προϊόντα/', NewProductsListView.as_view(), name='new_products_view'),
-    url(r'^κατηγορία/(?P<slug>[-\w]+)/$', CategoryView.as_view(), name='category_page'),
+    re_path(r'^κατηγορία/(?P<slug>[-\w]+)/$', CategoryView.as_view(), name='category_page'),
     path('brands/', BrandListView.as_view(), name='brands_view'),
     path('brand/λεπτομέριες/<slug:slug>/', BrandDetailView.as_view(), name='brand_detail_view'),
     path('cart/', CartPageView.as_view(), name='cart_view'),
@@ -34,7 +33,7 @@ urlpatterns = [
 
     # cart and checkout_paged
     re_path('^προσθήκη-στο-καλάθι/(?P<slug>[-\w]+)/', add_product_to_cart, name='add_to_cart'),
-    url(r'^προσθήκη-στο-καλάθι-με-μεγεθολογιο/(?P<slug>[-\w]+)/$', add_product_with_attr_to_cart, name='add_to_cart_with_attr'),
+    re_path(r'^προσθήκη-στο-καλάθι-με-μεγεθολογιο/(?P<slug>[-\w]+)/$', add_product_with_attr_to_cart, name='add_to_cart_with_attr'),
     
     path('voucher/add/', add_voucher_to_cart_view, name='add_voucher_cart_view'),
     path('voucher/delete/<int:pk>/', delete_voucher_from_cart_view, name='delete_voucher_from_cart'),
@@ -52,7 +51,7 @@ urlpatterns = [
     path('fast-login/', fast_login_view, name='fast_login'),
     path('δημιουργια-λογαριασμου/', register_view, name='register_view'),
     path('account_activation_sent/', account_activation_sent, name='account_activation_sent'),
-    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+    re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         activate, name='activate'),
     path('profile/', UserDashboardView.as_view(), name='user_profile'),
     path('profiles/', UserShippingListView.as_view(), name='profiles'),
@@ -63,8 +62,8 @@ urlpatterns = [
     path('profile/όλες-οι-παραγγελίες/', UserProfileOrderListView.as_view(), name='user_profile_order_list'),
     path('profile/παραγγελια-λεπτομέρειες/<slug:slug>/', OrderDetailView.as_view(), name='frontend_order_detail'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    url(r'^wish-list/add-or-remove/(?P<slug>[-\w]+)/', add_product_to_wishlist_view, name='add_product_wishlist'),
-    url(r'^wish-list/remove/(?P<slug>[-\w]+)/', remove_from_wishlist_view, name='remove_product_wishlist'),
+    re_path(r'^wish-list/add-or-remove/(?P<slug>[-\w]+)/', add_product_to_wishlist_view, name='add_product_wishlist'),
+    re_path(r'^wish-list/remove/(?P<slug>[-\w]+)/', remove_from_wishlist_view, name='remove_product_wishlist'),
     path('wist-list/', WishlistListView.as_view(), name='wishlist'),
 
     path('subscribe-manager/', user_subscription_view, name='frontend_subscribe'),
@@ -95,8 +94,8 @@ urlpatterns = [
     path('ajax/cart/modify-order-item/<int:pk>/', ajax_change_cart_item_qty, name='ajax_modify_qty'),
     path('ajax/check-voucher/', ajax_check_voucher, name='ajax_check_voucher'),
     path('ajax/cart-attribute/<int:pk>/', ajax_change_cart_attribute_qty, name='ajax_modify_attribute_qty'),
-    url(r'^ajax/add-product-modal/(?P<slug>[-\w]+)/$', ajax_add_product_modal, name='ajax_add_product_modal'),
-    url(r'^ajax/quick-product-view/(?P<slug>[-\w]+)/$', ajax_quick_modal_view, name='ajax_quick_modal_view'),
+    re_path(r'^ajax/add-product-modal/(?P<slug>[-\w]+)/$', ajax_add_product_modal, name='ajax_add_product_modal'),
+    re_path(r'^ajax/quick-product-view/(?P<slug>[-\w]+)/$', ajax_quick_modal_view, name='ajax_quick_modal_view'),
     path('ajax/delete/<int:pk>/<slug:action>/', ajax_delete_cart_item, name='ajax_delete_view'),
     path('ajax/estimate/costs/<slug:action>/', ajax_estimate_costs, name='ajax_estimate_cost'),
     path('ajax/checkout-update-prices/', ajax_update_cate_shipping_method_view, name='ajax_checkout_update_cart'),
