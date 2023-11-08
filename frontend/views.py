@@ -92,10 +92,14 @@ class CategoryView(ListView):
     model = Product
     paginate_by = 8
 
+
     def get(self, request, *args, **kwargs):
         self.category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        """
+        deprecated was a special request
         if not self.category.product_support_image:
             self.template_name = 'frontend/cocktail.html'
+        """
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
