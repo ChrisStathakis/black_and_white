@@ -20,11 +20,26 @@
   pointer-events: none;
   background-color: #ffc1c1;
   padding: 14px 15px 10px;
-  left: 16px;
   top: 25px;
   margin: 0 0 20px 0;
   width: 200px;
   z-index: 2;
+}
+
+table.import-preview tr.skip {
+  background-color: #d2d2d2;
+}
+
+table.import-preview tr.new {
+  background-color: #bdd8b2;
+}
+
+table.import-preview tr.delete {
+  background-color: #f9bebf;
+}
+
+table.import-preview tr.update {
+  background-color: #fdfdcf;
 }
 
 .import-preview td:hover .validation-error-count {
@@ -63,4 +78,38 @@
   text-transform: uppercase;
   font-weight: bold;
   font-size: 0.85em;
+}
+
+@media (prefers-color-scheme: dark) {
+  table.import-preview tr.skip {
+    background-color: #2d2d2d;
+  }
+
+  table.import-preview tr.new {
+    background-color: #42274d;
+  }
+
+  table.import-preview tr.delete {
+    background-color: #064140;
+  }
+
+  table.import-preview tr.update {
+    background-color: #020230;
+  }
+
+  .validation-error-container {
+    background-color: #003e3e;
+  }
+
+  /*
+  these declarations are necessary to forcibly override the
+  formatting applied by the diff-match-patch python library
+   */
+  table.import-preview td ins {
+    background-color: #190019 !important;
+  }
+
+  table.import-preview td del {
+    background-color: #001919 !important;
+  }
 }

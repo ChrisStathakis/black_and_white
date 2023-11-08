@@ -1,5 +1,16 @@
 .full-scroll-menu {
-    background-color: whitesmoke;
+    background-color: #6e6e6e;
+}
+
+.full-scroll-footer .sub-footer .container-fluid {
+    padding-left: 60px;
+    padding-right: 60px;
+    background-color: #6e6e6e;
+}
+
+
+.my_top_margin{
+    margin-top: 6%;
 }
 
 .blog-detail-page .comment-section li {
