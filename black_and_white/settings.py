@@ -13,10 +13,10 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", True)
 REAL_DB = os.environ.get("REAL_DB", False)
-PRODUCTION = False #os.environ.get("PRODUCTION", True)
+PRODUCTION = os.environ.get("PRODUCTION", False)
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["blackkaiwhite.herokuapp.com", ] if PRODUCTION else ['*']
 
 
 if PRODUCTION:

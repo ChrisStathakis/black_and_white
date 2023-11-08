@@ -57,6 +57,7 @@ class Order(DefaultOrderModel):
                              on_delete=models.SET_NULL,
                              related_name='orders'
                              )
+
     profile = models.ForeignKey(Profile,
                                 blank=True,
                                 null=True,
